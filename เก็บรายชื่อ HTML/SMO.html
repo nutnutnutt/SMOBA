@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางข้อมูลนักศึกษา</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .search-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>ตารางข้อมูลนักศึกษา</h2>
+        
+        <!-- ฟอร์มค้นหารหัสนักศึกษา -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="form-control" placeholder="ค้นหาด้วยรหัสนักศึกษา" onkeyup="searchStudent()">
+        </div>
+        
+        <!-- ตารางข้อมูลนักศึกษา -->
+        <table class="table table-bordered" id="studentTable">
+            <thead>
+                <tr>
+                    <th>ลำดับ</th>
+                    <th>รหัสนักศึกษา</th>
+                    <th>ชื่อ-สกุล</th>
+                    <th>สาขา</th>
+                    <th>ชั้นปี</th>
+                    <th>ขนาดไซส์เสื้อ</th>
+                    <th>เบอร์โทรศัพท์</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                <!-- ข้อมูลจะถูกเติมที่นี่โดย JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const students = [
+    { id: 1, studentId: '6606102629', name: 'สุทธิดา มังคะละ', department: 'การตลาด', year: '4 ปี', size: 'S', phone: '0949036326' },
+    { id: 2, studentId: '6706105010', name: 'เจนจิรา เครือแก้ว', department: 'DBI', year: '2 ปี', size: 'M', phone: '0931969714' },
+    { id: 3, studentId: '6706101658', name: 'อานุภาพ อนุรักษ์ธรรมดี', department: 'การจัดการ', year: '4 ปี', size: 'L', phone: '0826148006' },
+    { id: 4, studentId: '6706104381', name: 'ปาณทัต จันทร์นวล', department: 'การเงิน', year: '4 ปี', size: 'XL', phone: '0830914454' },
+    { id: 5, studentId: '6706105048', name: 'วรรณยุภา ดวงหมื่น', department: 'DBI', year: '2 ปี', size: 'XL', phone: '0985623162' },
+    { id: 6, studentId: '6706101361', name: 'ญาณิศา บุญศาสตร์', department: 'การจัดการ', year: '4 ปี', size: 'L', phone: '0639586818' },
+    { id: 7, studentId: '6606104425', name: 'แพรพลอย ป้องปก', department: 'การเงิน', year: '4 ปี', size: 'M', phone: '0832438259' },
+    { id: 8, studentId: '6606102351', name: 'จีราพร สุฤทธิ์', department: 'การตลาด', year: '4 ปี', size: 'M', phone: '0642789212' },
+    { id: 9, studentId: '6606103303', name: 'กนกวรรณ เเถมคำ', department: 'การบัญชี', year: '4 ปี', size: 'XL', phone: '0934561805' },
+    { id: 10, studentId: '6506101432', name: 'บงกชกร กองโชค', department: 'การจัดการ', year: '4 ปี', size: 'L', phone: '0989462428' },
+    { id: 11, studentId: '6606104452', name: 'ริชะโกะ อิมะอิ', department: 'การเงิน', year: '4 ปี', size: 'S', phone: '0989093714' },
+    { id: 12, studentId: '6706102363', name: 'ฐิตินาถ คนไหว', department: 'การตลาด', year: '4 ปี', size: 'M', phone: '0649083294' },
+    { id: 13, studentId: '6606104402', name: 'ปิณฑิรา ไชยปรุง', department: 'การเงิน', year: '4 ปี', size: 'M', phone: '0631564150' },
+    { id: 14, studentId: '6606101549', name: 'ศุจินันท์ แสงจันทร์', department: 'การจัดการ', year: '4 ปี', size: 'L', phone: '0655672376' },
+    { id: 15, studentId: '6606104405', name: 'เปรมฤดี ชุ่มธิ', department: 'การเงิน', year: '4 ปี', size: 'M', phone: '0934189420' },
+    { id: 16, studentId: '6606106305', name: 'กัญญาวีร์ จันทราช', department: 'ค้าปลีก', year: '4 ปี', size: '3XL', phone: '0987833711' },
+    { id: 17, studentId: '6606104437', name: 'มงคล สุริบุตร', department: 'การเงิน', year: '4 ปี', size: 'XL', phone: '0634048579' },
+    { id: 18, studentId: '6606104329', name: 'จิรสุดา คลังแสง', department: 'การเงิน', year: '4 ปี', size: 'S', phone: '0969536553' },
+    { id: 19, studentId: '6606102327', name: 'กุลนันท์ ศรีวิชัย', department: 'การตลาด', year: '4 ปี', size: 'XL', phone: '0867918268' },
+    { id: 20, studentId: '6606104322', name: 'งามตา  อ่อนแก้ว', department: 'การเงิน', year: '4 ปี', size: 'S', phone: '0953413690' },
+    
+];
+
+        // ฟังก์ชันแสดงข้อมูลในตาราง
+        function loadStudents() {
+            const tableBody = document.getElementById('studentTableBody');
+            tableBody.innerHTML = ''; // เคลียร์ข้อมูลที่มีอยู่ในตารางก่อน
+
+            students.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${student.studentId}</td>
+                    <td>${student.name}</td>
+                    <td>${student.department}</td>
+                    <td>${student.year}</td>
+                    <td>${student.size}</td>
+                    <td>${student.phone}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // ฟังก์ชันค้นหาข้อมูลนักศึกษา
+        function searchStudent() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById('studentTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                if (cells.length > 0) {
+                    const studentId = cells[1].textContent || cells[1].innerText;
+                    if (studentId.toUpperCase().indexOf(filter) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        // โหลดข้อมูลนักศึกษาทันทีที่หน้าโหลดเสร็จ
+        window.onload = loadStudents;
+    </script>
+
+<script>
+    // ฟังก์ชันค้นหาข้อมูลนักศึกษา
+function searchStudent() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toUpperCase(); // คำค้นหา
+    const table = document.getElementById('studentTable');
+    const rows = table.getElementsByTagName('tr'); // ทุกแถวในตาราง
+
+    // เริ่มจากแถวที่ 1 เพราะแถวที่ 0 คือ header
+    for (let i = 1; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName('td'); // เซลล์ในแต่ละแถว
+        if (cells.length > 0) {
+            let matchFound = false;
+            
+            // ตรวจสอบในทุกคอลัมน์ (ลำดับ, รหัสนักศึกษา, ชื่อ, สาขา, ชั้นปี, ขนาดไซส์เสื้อ, เบอร์โทรศัพท์)
+            for (let j = 0; j < cells.length; j++) {
+                const cellText = cells[j].textContent || cells[j].innerText;
+                if (cellText.toUpperCase().indexOf(filter) > -1) {
+                    matchFound = true;
+                    break; // หากพบคำค้นหาในคอลัมน์ใดคอลัมน์หนึ่ง ให้หยุดตรวจสอบและแสดงแถวนี้
+                }
+            }
+
+            // แสดงหรือซ่อนแถวตามผลการค้นหา
+            rows[i].style.display = matchFound ? '' : 'none';
+        }
+    }
+}
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
